@@ -1,36 +1,38 @@
-name: CD - Deploy with Terraform
+name: CD - Deploy to EC2 with Terraform
 
 on:
   workflow_dispatch:
-    inputs:
-      image_tag:
-        description: 'Docker image tag to deploy'
-        required: true
-        default: 'latest'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./terraform
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
 
       - name: Terraform Init
         run: terraform init
+        working-directory: ./ci/cd-strapi/terraform
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Terraform Plan
-        run: terraform plan -var="docker_image_tag=${{ github.event.inputs.image_tag }}"
+        run: terraform plan -var="docker_image_tag=latest"
+        working-directory: ./ci/cd-strapi/terraform
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve -var="docker_image_tag=${{ github.event.inputs.image_tag }}"
-
+        run: terraform apply -auto-approve -var="docker_image_tag=latest"
+        working-directory: ./ci/cd-strapi/terraform
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
