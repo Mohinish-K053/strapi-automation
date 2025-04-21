@@ -9,7 +9,7 @@ data "template_file" "user_data" {
 }
 
 resource "aws_instance" "strapi" {
-  ami                         = "ami-0e670eb768a5fc3d4" # Ubuntu 24.04
+  ami                         = "ami-084568db4383264d4" # Ubuntu 24.04
   instance_type               = "t2.micro"
   key_name                    = "strapi-dp"  # Make sure to replace this with your SSH key
   associate_public_ip_address = true
