@@ -2,11 +2,6 @@ name: CD - Deploy to EC2 with Terraform
 
 on:
   workflow_dispatch:
-    inputs:
-      docker_tag:
-        description: 'Docker image tag to deploy'
-        required: true
-        default: 'latest'
 
 jobs:
   deploy:
@@ -23,21 +18,21 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./terraform
+        working-directory: ci/cd-strapi/terraform  # Adjusted to your folder structure
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Terraform Plan
-        run: terraform plan -var="docker_image_tag=${{ github.event.inputs.docker_tag }}"
-        working-directory: ./ci/cd-strapi/terraform
+        run: terraform plan -var="docker_image_tag=latest"
+        working-directory: ci/cd-strapi/terraform  # Adjusted to your folder structure
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve -var="docker_image_tag=${{ github.event.inputs.docker_tag }}"
-        working-directory: ./terraform
+        run: terraform apply -auto-approve -var="docker_image_tag=latest"
+        working-directory: ci/cd-strapi/terraform  # Adjusted to your folder structure
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
