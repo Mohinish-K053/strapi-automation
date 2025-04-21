@@ -18,21 +18,21 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: strapi-automation/terraform  # Adjusted to your folder structure
+        working-directory: ci/cd-strapi/terraform
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Terraform Plan
         run: terraform plan -var="docker_image_tag=latest"
-        working-directory: strapi-automation/terraform  # Adjusted to your folder structure
+        working-directory: ci/cd-strapi/terraform
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Terraform Apply
         run: terraform apply -auto-approve -var="docker_image_tag=latest"
-        working-directory: strapi-automation/terraform  # Adjusted to your folder structure
+        working-directory: ci/cd-strapi/terraform
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
