@@ -37,7 +37,7 @@ jobs:
           push: true
           tags: |
             ${{ env.IMAGE_NAME }}:${{ env.TAG }}
-            ${{ env.IMAGE_NAME }}:latest  # <-- also tag as latest
-
+            ${{ env.IMAGE_NAME }}:latest 
+            
     outputs:
       image_tag: ${{ steps.vars.outputs.image_tag }}
