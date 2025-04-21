@@ -2,8 +2,8 @@
     FROM node:18-bullseye AS builder
 
     # Install dependencies needed for native builds
-    RUN apt-get update &&
-        apt-get install -y python3 make g++ git &&
+    RUN apt-get update && \
+        apt-get install -y python3 make g++ git && \
         rm -rf /var/lib/apt/lists/*
     
     WORKDIR /opt/app
