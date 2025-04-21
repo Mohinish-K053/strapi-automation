@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: mohinish053/strapi-cicd
+      IMAGE_NAME: mohinish053/strapi-task4
 
     steps:
       - name: Checkout code
@@ -26,18 +26,18 @@ jobs:
 
       - name: Set image tag
         id: vars
-        run: echo "TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        run: |
+          echo "TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "image_tag=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ env.IMAGE_NAME }}:${{ env.TAG }}
-
-      - name: Set image tag output
-        id: tag
-        run: echo "::set-output name=image_tag::${{ env.TAG }}"
+          tags: |
+            ${{ env.IMAGE_NAME }}:${{ env.TAG }}
+            ${{ env.IMAGE_NAME }}:latest  # <-- also tag as latest
 
     outputs:
-      image_tag: ${{ steps.tag.outputs.image_tag }}
+      image_tag: ${{ steps.vars.outputs.image_tag }}
